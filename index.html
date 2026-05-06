@@ -429,37 +429,7 @@ function showResult() {
 }
 
 function showRegister() {
-  const st = s();
-  document.getElementById('cta-area').innerHTML = `
-    <div class="cta-box" style="text-align:left">
-      <h3>${st.regTitle}</h3>
-      <p>${st.regDesc}</p>
-      <div class="form-row">
-        <div class="form-group"><label>${st.fFirst}</label><input type="text" id="rf" placeholder="${st.pFirst}"></div>
-        <div class="form-group"><label>${st.fLast}</label><input type="text" id="rl" placeholder="${st.pLast}"></div>
-      </div>
-      <div class="form-group"><label>${st.fEmail}</label><input type="email" id="re" placeholder="${st.pEmail}"></div>
-      <div class="form-row">
-        <div class="form-group"><label>${st.fDept}</label><input type="text" id="rd" placeholder="${st.pDept}"></div>
-        <div class="form-group"><label>${st.fPos}</label><input type="text" id="rp" placeholder="${st.pPos}"></div>
-      </div>
-      <button class="btn btn-primary" onclick="submitReg()">${st.submit}</button>
-    </div>
-  `;
-  document.getElementById('cta-area').scrollIntoView({ behavior: 'smooth' });
-}
-
-function submitReg() {
-  const st = s();
-  const f = document.getElementById('rf').value.trim();
-  const l = document.getElementById('rl').value.trim();
-  const e = document.getElementById('re').value.trim();
-  if (!f || !l || !e) { alert(st.valErr); return; }
-
-  const GOOGLE_FORM_URL = 'https://forms.gle/9qYPmuLJK2WbChqr8'
-
-  window.open(GOOGLE_FORM_URL, '_blank');
-  goTo('screen-success');
+  window.open('https://forms.gle/9qYPmuLJK2WbChqr8', '_blank');
 }
 
 updateLandingText();
