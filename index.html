@@ -267,28 +267,148 @@ const STRINGS = {
 // ─────────────────────────────────────────────
 const QUESTIONS = {
   th: [
-    { id:1, cat:'general', text:'เมื่อคุณมีงานหลายชิ้นพร้อมกัน สิ่งแรกที่ควรทำคืออะไร?', opts:['เริ่มจากงานที่ง่ายที่สุดก่อนเพื่อล้างรายการ','จัดลำดับความสำคัญก่อนว่างานไหน urgent / important','ทำทุกงานพร้อมกัน (multitask) เพื่อประหยัดเวลา','รอให้งานเก่าเสร็จทั้งหมดก่อนค่อยรับงานใหม่'], ans:1, explain:'การจัดลำดับความสำคัญด้วย Time Matrix คือรากฐานของ Time Management ที่ดี ก่อนลงมือทำต้องรู้ก่อนว่าอะไรควรทำก่อน' },
-    { id:2, cat:'pomodoro', text:'Pomodoro Technique คือการทำงาน 25 นาที แล้วพัก 5 นาที — ข้อใดอธิบาย "เหตุผล" ที่ถูกต้องที่สุด?', opts:['เพราะสมองมนุษย์ไม่สามารถจดจ่อได้นานกว่า 25 นาที','เพื่อสร้าง Deep Work โดยป้องกันการถูกขัดจังหวะและรักษาสมาธิ','เพราะ 25 นาทีเป็นช่วงเวลาที่พิสูจน์แล้วว่าสั้นที่สุด','เพื่อให้มีเวลาตรวจ social media ทุก 30 นาที'], ans:1, explain:'Pomodoro ถูกออกแบบมาเพื่อสร้าง uninterrupted deep work — ป้องกันการถูกขัดจังหวะและสร้างสมาธิในการทำงานที่ซับซ้อน' },
-    { id:3, cat:'pomodoro', text:'งานประเภทใดที่ "ไม่เหมาะ" กับการใช้ Pomodoro Technique?', opts:['งานเขียน Report ที่ต้องการสมาธิสูง','งาน Creative เช่น ออกแบบ Presentation','งานตอบอีเมลทั่วไปหรืองาน Admin ซ้ำๆ','งาน Analysis ที่ต้องการข้อมูลเชิงลึก'], ans:2, explain:'Pomodoro เหมาะกับงานที่ต้องการ Deep Work ไม่เหมาะกับงานซ้ำๆ หรืองาน Admin เบาๆ ที่ไม่ต้องการความจดจ่อต่อเนื่อง' },
-    { id:4, cat:'todo', text:'To-Do List ที่ดีควรมีกี่ task ต่อวัน และรูปแบบใดที่มีประสิทธิภาพสูงสุด?', opts:['ไม่จำกัดจำนวน — ยิ่งมากยิ่งดีเพื่อให้ครอบคลุมทุกอย่าง','3–5 tasks และต้องเป็น actionable task (ทำได้ทันที)','10 tasks ขึ้นไปเพื่อให้ไม่มีเวลาว่าง','20 tasks แต่จัดกลุ่มตาม category'], ans:1, explain:'"Limit to 3–5 tasks only" คือหลักการสำคัญ และ task ต้องเป็น actionable เช่น "Request invoice from vendor" ไม่ใช่ "Pay vendor"' },
-    { id:5, cat:'todo', text:'ข้อใดคือ "Actionable Task" ที่ดีที่สุด?', opts:['ติดตาม KPI','ประสานงานเรื่อง Event','ส่ง survey ให้พนักงาน 10 คนภายใน 11:00 น.','ดูแลเรื่อง Performance Review ของทีม'], ans:2, explain:'Actionable Task ต้องระบุ "ทำอะไร กับใคร ภายในเมื่อไหร่" — "ส่ง survey ให้พนักงาน 10 คนภายใน 11:00 น." มีครบถ้วน' },
-    { id:6, cat:'matrix', text:'งาน "ตอบอีเมลแจ้งเรื่องด่วนจากลูกค้า" ควรอยู่ใน Quadrant ใดของ Time Matrix?', opts:['Q1 — Manage (สำคัญ + ด่วน)','Q2 — Focus (สำคัญ + ไม่ด่วน)','Q3 — Avoid (ไม่สำคัญ + ด่วน)','Q4 — Limit (ไม่สำคัญ + ไม่ด่วน)'], ans:0, explain:'งานที่ด่วนและสำคัญพร้อมกัน เช่น เรื่องลูกค้า crisis อยู่ใน Q1 (Manage) ต้องจัดการทันที' },
-    { id:7, cat:'matrix', text:'พนักงานที่ใช้เวลาส่วนใหญ่อยู่ใน Q2 (สำคัญ + ไม่ด่วน) มักจะ...', opts:['รู้สึก stress และ reactive ตลอดเวลา','มีเวลาวางแผน พัฒนาตัวเอง และลด crisis ในระยะยาว','ทำงานน้อยกว่าคนอื่น เพราะไม่มีความเร่งด่วน','ผัดวันประกันพรุ่งเพราะงานไม่ด่วน'], ans:1, explain:'Q2 คือ "Focus Zone" — คนที่ทำงานใน Q2 มาก จะวางแผนได้ดี พัฒนาทักษะ และลดการ fire-fighting ใน Q1 ในระยะยาว' },
-    { id:8, cat:'general', text:'คุณมี task ด่วนแทรกเข้ามากลางช่วง Pomodoro — วิธีจัดการที่ดีที่สุดคือ?', opts:['หยุด Pomodoro ทันทีและไปทำ task ใหม่','จดบันทึก task ใหม่ไว้ก่อน แล้วทำต่อจนจบ Pomodoro แล้วค่อยประเมิน','ทำ task ใหม่ควบคู่ไปกับงานเดิมพร้อมกัน','ปฏิเสธ task ใหม่ทุกครั้งเพราะกำลัง Pomodoro อยู่'], ans:1, explain:'แนวทางของ Pomodoro คือ "จดไว้ก่อน" แล้วทำให้จบ session เพื่อรักษา Deep Work จากนั้นค่อย prioritize task ใหม่' },
-    { id:9, cat:'pomodoro', text:'หลังทำ Pomodoro ครบ 4 รอบ ควรพักนานแค่ไหน?', opts:['5 นาที เหมือนเดิม','10 นาที','15–30 นาที (Long Break)','1 ชั่วโมง เพราะทำงานมาเยอะ'], ans:2, explain:'หลัก Pomodoro คือ พัก 5 นาทีหลังแต่ละ session และพักยาว 15–30 นาทีหลังครบ 4 sessions เพื่อให้สมองฟื้นตัวเต็มที่' },
-    { id:10, cat:'general', text:'ข้อใดคือสัญญาณว่าคุณ "บริหารเวลาได้ดี"?', opts:['ทำงานมากกว่า 10 ชั่วโมง/วันและไม่มีวันหยุด','รู้สึก busy ตลอดเวลาและมีงาน backlog น้อยมาก','งานสำคัญเสร็จตามกำหนด และยังมีเวลาพัฒนาตัวเองได้','ตอบ Line/Email ได้ทุกข้อความภายใน 5 นาที'], ans:2, explain:'การบริหารเวลาที่ดีไม่ใช่การ "ยุ่ง" ตลอดเวลา แต่คือทำสิ่งสำคัญเสร็จตามเป้า และยังมีเวลาสำหรับพัฒนาตัวเองและพักผ่อน' },
+    {
+      id:1, cat:'general',
+      text:'เมื่อคุณมีงานหลายชิ้นพร้อมกัน สิ่งแรกที่ควรทำคืออะไร?',
+      opts:['เริ่มจากงานที่ใช้เวลาน้อยที่สุดก่อน เพื่อลด task ในรายการให้เร็วที่สุด','จัดลำดับความสำคัญก่อนว่างานไหน urgent และ important ที่สุด','เปิดปฏิทินดูก่อนว่ามีประชุมอะไรบ้าง แล้วค่อยวางแผนเวลาที่เหลือ','แบ่งงานทุกชิ้นออกเป็น subtask ย่อยๆ แล้วค่อยลงมือ'],
+      ans:1,
+      explain:'การจัดลำดับความสำคัญด้วย urgent/important matrix ต้องเกิดขึ้นก่อนลงมือทำเสมอ — การล้าง task เล็กหรือดูปฏิทินก่อน คือการเสียเวลากับสิ่งที่ไม่ใช่ priority หลัก'
+    },
+    {
+      id:2, cat:'pomodoro',
+      text:'Pomodoro Technique ใช้การทำงาน 25 นาที พัก 5 นาที — เหตุผลหลักที่ถูกต้องที่สุดคืออะไร?',
+      opts:['เพื่อให้สมองได้พักสม่ำเสมอและป้องกัน burnout ในระยะยาว','เพื่อสร้างช่วง Deep Work ที่ไม่ถูกขัดจังหวะ และฝึก focus ให้เป็นนิสัย','เพราะงานวิจัยพิสูจน์แล้วว่า 25 นาทีคือ peak concentration window ของมนุษย์','เพื่อให้มีจุด checkpoint สม่ำเสมอในการ review ความคืบหน้าของงาน'],
+      ans:1,
+      explain:'หัวใจของ Pomodoro คือการสร้าง uninterrupted work block — ไม่ใช่แค่การพักสมอง หรือ review งาน แต่คือการฝึก focus โดยตัดทุก distraction ออกในช่วง 25 นาทีนั้น'
+    },
+    {
+      id:3, cat:'pomodoro',
+      text:'งานประเภทใดที่ได้ประโยชน์จาก Pomodoro Technique น้อยที่สุด?',
+      opts:['งานเขียน Report ที่ต้องการความละเอียดสูง','งานประชุมและ discussion ที่ต้องการ real-time response','งาน Analysis ที่ต้องการ deep thinking ต่อเนื่อง','งาน Creative ที่ต้องการ brainstorm และออกแบบ'],
+      ans:1,
+      explain:'งานประชุมและ real-time collaboration ไม่สามารถ "pause" ได้ตามเวลา Pomodoro — Pomodoro เหมาะกับงานที่ทำคนเดียวและควบคุมจังหวะได้เอง'
+    },
+    {
+      id:4, cat:'todo',
+      text:'To-Do List ที่มีประสิทธิภาพสูงสุดควรเป็นอย่างไร?',
+      opts:['ครอบคลุมทุก task ที่ต้องทำในสัปดาห์นี้ เพื่อไม่ให้ตกหล่น','มี 3–5 tasks ต่อวัน และแต่ละ task ต้องลงมือทำได้ทันที','แบ่งตาม category เช่น งานด่วน งานสำคัญ งานส่วนตัว','อัปเดต real-time ตลอดวัน เพิ่มหรือลบ task ได้เสมอเมื่อมีงานใหม่เข้ามา'],
+      ans:1,
+      explain:'"3–5 actionable tasks per day" คือหลักการสำคัญ — list ที่ยาวเกินทำให้ prioritize ไม่ได้และจบวันด้วยความรู้สึก fail ทุก task ต้องเป็น actionable คือลงมือทำได้เลยโดยไม่ต้องตีความ'
+    },
+    {
+      id:5, cat:'todo',
+      text:'ข้อใดคือ "Actionable Task" ที่เขียนได้ถูกต้องที่สุด?',
+      opts:['ติดตามความคืบหน้า KPI ของทีม Q3','ประสานงานกับ vendor เรื่อง event เดือนหน้า','ส่งสรุปผล survey ให้ผู้จัดการ 3 คนภายใน 17:00 น. วันนี้','เตรียมเอกสารสำหรับประชุม strategy ของสัปดาห์นี้'],
+      ans:2,
+      explain:'Actionable Task ต้องระบุ: ทำอะไร + กับใคร/ที่ไหน + ภายในเมื่อไหร่ — ข้อ C มีครบทั้ง 3 องค์ประกอบ ข้ออื่นยังเป็น topic หรือ goal ที่ต้องตีความก่อนลงมือ'
+    },
+    {
+      id:6, cat:'matrix',
+      text:'งาน "วางแผน training พนักงานใหม่ที่จะเริ่มเดือนหน้า" ควรอยู่ใน Quadrant ใดของ Time Matrix?',
+      opts:['Q1 — Manage (สำคัญ + ด่วน) เพราะกระทบพนักงานใหม่โดยตรง','Q2 — Focus (สำคัญ + ไม่ด่วน) เพราะสำคัญแต่ยังมีเวลาวางแผน','Q3 — Avoid (ไม่สำคัญ + ด่วน) เพราะ HR ควรทำมากกว่า manager','Q4 — Limit (ไม่สำคัญ + ไม่ด่วน) เพราะยังไม่มีกำหนดชัดเจน'],
+      ans:1,
+      explain:'งานนี้สำคัญต่อผลลัพธ์ระยะยาวแต่ยังไม่ด่วน — ตรงกับนิยาม Q2 พอดี ซึ่งเป็น quadrant ที่ควรลงทุนเวลามากที่สุดเพราะช่วยป้องกัน Q1 ในอนาคต'
+    },
+    {
+      id:7, cat:'matrix',
+      text:'พนักงานที่ใช้เวลาส่วนใหญ่อยู่ใน Q2 (สำคัญ + ไม่ด่วน) มักจะเป็นแบบไหน?',
+      opts:['รู้สึกกดดันตลอดเวลาเพราะงานสำคัญทุกชิ้นต้องใช้เวลามาก','มีเวลาวางแผน พัฒนาทักษะ และลดปัญหา crisis ในระยะยาว','ทำงานได้น้อยกว่าคนอื่นเพราะไม่มีความเร่งด่วนกระตุ้น','มักถูกมองว่าไม่ responsive เพราะไม่ได้จัดการงานด่วนก่อน'],
+      ans:1,
+      explain:'Q2 คือ "Focus Zone" ที่แท้จริง — คนที่ invest เวลาใน Q2 จะวางแผนได้ล่วงหน้า พัฒนาตัวเอง และลด fire-fighting ใน Q1 ได้ในระยะยาว'
+    },
+    {
+      id:8, cat:'general',
+      text:'คุณมี task ใหม่ด่วนแทรกเข้ามากลางช่วง Pomodoro ที่กำลังโฟกัสอยู่ — วิธีจัดการที่ดีที่สุดคืออะไร?',
+      opts:['ประเมินก่อนว่า task ใหม่นั้น urgent จริงหรือเปล่า ถ้าใช่ให้หยุด Pomodoro แล้วสลับไปทำ','จดบันทึก task ใหม่ไว้ก่อน ทำ Pomodoro ต่อจนจบ แล้วค่อย prioritize','แบ่งเวลา 5 นาทีสุดท้ายของ Pomodoro จัดการ task ใหม่นั้นก่อนพัก','ส่ง task ใหม่ให้คนอื่นในทีมจัดการแทน เพื่อรักษา focus ของตัวเอง'],
+      ans:1,
+      explain:'Pomodoro ใช้ "distraction log" — จดไว้ก่อนเพื่อไม่ลืม แล้วรักษา focus จนจบ session จากนั้นค่อย evaluate ว่า task ใหม่นั้น urgent จริงหรือเปล่า การสลับกลางคัน destroy Deep Work โดยไม่จำเป็น'
+    },
+    {
+      id:9, cat:'pomodoro',
+      text:'หลังทำ Pomodoro ครบ 4 รอบ ควรพักนานเท่าไหร่และทำอะไรในช่วงนั้น?',
+      opts:['5 นาที เหมือนเดิม แต่เปลี่ยนไปทำ task อื่นแทนเพื่อ refresh สมอง','10–15 นาที และใช้เวลานั้น review งานที่ทำมาทั้ง 4 รอบ','15–30 นาที และควรออกจาก workspace เพื่อให้สมองพักจริงๆ','30–60 นาที เพราะทำงาน deep work มาหนักต้องพักให้เต็มที่'],
+      ans:2,
+      explain:'Long break หลัง 4 sessions คือ 15–30 นาที และควร "ออกจาก mode" จริงๆ — ไม่ใช่แค่เปลี่ยน task หรือนั่ง review เพราะสมองต้องการ real recovery ไม่ใช่แค่ task switching'
+    },
+    {
+      id:10, cat:'general',
+      text:'ข้อใดสะท้อนว่าคนนั้น "บริหารเวลาได้ดี" มากที่สุด?',
+      opts:['ไม่มี backlog ค้างเลย และตอบ message ได้เร็วทุกช่องทาง','งานสำคัญเสร็จตามกำหนด และยังมีเวลาพัฒนาตัวเองได้','ทำงานครบทุก task ใน To-Do List โดยไม่มีตกหล่น','รู้สึก productive ตลอดทั้งวันและไม่มีเวลาว่างเหลือ'],
+      ans:1,
+      explain:'Time Management ที่ดีวัดที่ผลลัพธ์ ไม่ใช่ความยุ่ง — การตอบเร็ว การล้าง backlog หรือการรู้สึก productive ล้วนเป็น output ที่ไม่ได้สะท้อน priority ที่ถูกต้อง'
+    },
   ],
   en: [
-    { id:1, cat:'general', text:'When you have multiple tasks at the same time, what should you do first?', opts:['Start with the easiest task to clear the list quickly','Prioritize by urgency and importance before starting anything','Multitask all of them simultaneously to save time','Wait until all old tasks are done before accepting new ones'], ans:1, explain:'Prioritizing with the Time Matrix (Eisenhower) is the foundation of effective time management. Know what to do first before diving in.' },
-    { id:2, cat:'pomodoro', text:'The Pomodoro Technique uses 25-minute work sessions with 5-minute breaks. Which best explains the reason behind this?', opts:['Because the human brain cannot focus for more than 25 minutes','To create deep, uninterrupted work by preventing distractions','Because 25 minutes is scientifically proven to be the shortest effective unit','To allow time to check social media every 30 minutes'], ans:1, explain:'Pomodoro is designed to foster uninterrupted deep work — preventing interruptions and sustaining focus for complex tasks.' },
-    { id:3, cat:'pomodoro', text:'Which type of task is LEAST suited for the Pomodoro Technique?', opts:['Writing a detailed report requiring high concentration','Creative work such as designing a presentation','Answering routine emails or repetitive admin tasks','In-depth data analysis work'], ans:2, explain:'Pomodoro works best for deep work requiring sustained focus. It\'s not well-suited for repetitive or light admin tasks.' },
-    { id:4, cat:'todo', text:'How many tasks should an effective daily To-Do List have, and what format works best?', opts:['No limit — the more the better to cover everything','3–5 tasks, written as actionable items you can act on immediately','10 or more tasks to keep busy all day','20 tasks grouped by category'], ans:1, explain:'"Limit to 3–5 tasks only" is a key principle. Tasks must be actionable — e.g. "Request invoice from vendor", not just "Pay vendor".' },
-    { id:5, cat:'todo', text:'Which is the best example of an "Actionable Task"?', opts:['Follow up on KPIs','Coordinate the event','Send survey to 10 employees by 11:00 AM','Handle team performance reviews'], ans:2, explain:'An actionable task must specify what, with whom, and by when. "Send survey to 10 employees by 11:00 AM" covers all three.' },
-    { id:6, cat:'matrix', text:'"Reply to an urgent client email" belongs in which quadrant of the Time Matrix?', opts:['Q1 — Manage (Important + Urgent)','Q2 — Focus (Important + Not Urgent)','Q3 — Avoid (Not Important + Urgent)','Q4 — Limit (Not Important + Not Urgent)'], ans:0, explain:'Tasks that are both urgent and important — like a client crisis — belong in Q1 (Manage) and must be handled immediately.' },
-    { id:7, cat:'matrix', text:'Employees who spend most of their time in Q2 (Important + Not Urgent) tend to...', opts:['Feel constantly stressed and reactive','Have time to plan, grow, and reduce crises in the long run','Work less than others due to no urgency','Procrastinate because nothing feels urgent'], ans:1, explain:'Q2 is the "Focus Zone" — people who invest here plan better, build skills, and reduce Q1 fire-fighting over time.' },
-    { id:8, cat:'general', text:'An urgent task comes in mid-Pomodoro session. What\'s the best way to handle it?', opts:['Stop the Pomodoro immediately and switch to the new task','Write it down, finish the current Pomodoro, then reassess','Do both tasks simultaneously','Always refuse new tasks while in a Pomodoro'], ans:1, explain:'The Pomodoro method recommends "writing it down" (internal distraction log), finishing the session to protect deep work, then prioritizing the new task.' },
-    { id:9, cat:'pomodoro', text:'After completing 4 Pomodoro sessions, how long should you take a break?', opts:['5 minutes, same as usual','10 minutes','15–30 minutes (Long Break)','1 hour, because you\'ve worked a lot'], ans:2, explain:'Pomodoro protocol calls for a 5-minute break after each session and a long break of 15–30 minutes after 4 sessions, to fully restore mental energy.' },
-    { id:10, cat:'general', text:'Which is the clearest sign that you manage your time well?', opts:['Working 10+ hours a day with no days off','Feeling busy all the time with minimal backlog','Important tasks get done on schedule, and you still have time to develop yourself','Responding to every Line/Email within 5 minutes'], ans:2, explain:'Good time management isn\'t about being busy — it\'s about completing what matters on time while still having space to grow and rest.' },
+    {
+      id:1, cat:'general',
+      text:'When you have multiple tasks at the same time, what should you do first?',
+      opts:['Start with the quickest tasks to reduce the number of items on the list as fast as possible','Prioritize by identifying which task is most urgent and important first','Open your calendar to see what meetings you have, then plan around the remaining time','Break every task into smaller subtasks before starting anything'],
+      ans:1,
+      explain:'Prioritizing by urgency and importance must happen before taking any action. Clearing quick tasks or checking the calendar first means spending time on things that may not be the real priority.'
+    },
+    {
+      id:2, cat:'pomodoro',
+      text:'The Pomodoro Technique uses 25-minute work sessions with 5-minute breaks. What is the most accurate reason for this structure?',
+      opts:['To give the brain regular rest and prevent long-term burnout','To create uninterrupted Deep Work blocks and build focus as a habit','Because research has proven 25 minutes is the peak concentration window for humans','To create regular checkpoints for reviewing work progress'],
+      ans:1,
+      explain:'The core of Pomodoro is creating an uninterrupted work block — not just rest or review. The goal is to cut all distractions during that 25-minute window and train sustained focus.'
+    },
+    {
+      id:3, cat:'pomodoro',
+      text:'Which type of work benefits least from the Pomodoro Technique?',
+      opts:['Writing a detailed report requiring high precision','Meetings and discussions that require real-time responses','Analysis tasks requiring sustained deep thinking','Creative work involving brainstorming and design'],
+      ans:1,
+      explain:'Meetings and real-time collaboration cannot be "paused" on a Pomodoro timer. The technique works best for solo work where you control your own pace and can eliminate interruptions.'
+    },
+    {
+      id:4, cat:'todo',
+      text:'What does the most effective To-Do List look like?',
+      opts:['Covers all tasks for the week so nothing falls through the cracks','Has 3–5 tasks per day, each one actionable enough to start immediately','Organized by category such as urgent, important, and personal tasks','Updated in real-time throughout the day, adding or removing tasks as new work comes in'],
+      ans:1,
+      explain:'"3–5 actionable tasks per day" is the key principle. A long list makes prioritization impossible and ends the day with a sense of failure. Every task must be actionable — no interpretation needed to begin.'
+    },
+    {
+      id:5, cat:'todo',
+      text:'Which is the most correctly written "Actionable Task"?',
+      opts:['Follow up on Q3 team KPI progress','Coordinate with vendor about next month\'s event','Send survey summary to 3 managers by 5:00 PM today','Prepare documents for this week\'s strategy meeting'],
+      ans:2,
+      explain:'An actionable task must have: what to do + who/where + by when. Option C has all three. The others are topics or goals that still require interpretation before you can start.'
+    },
+    {
+      id:6, cat:'matrix',
+      text:'"Plan a training program for new employees starting next month" belongs in which quadrant of the Time Matrix?',
+      opts:['Q1 — Manage (Important + Urgent) because it directly affects new staff','Q2 — Focus (Important + Not Urgent) because it matters but there\'s still time to plan','Q3 — Avoid (Not Important + Urgent) because HR should handle this more than the manager','Q4 — Limit (Not Important + Not Urgent) because no hard deadline is set yet'],
+      ans:1,
+      explain:'This task is important for long-term results but not yet urgent — exactly Q2. This is the quadrant worth investing most time in because it prevents future Q1 crises.'
+    },
+    {
+      id:7, cat:'matrix',
+      text:'Employees who spend most of their time in Q2 (Important + Not Urgent) tend to be:',
+      opts:['Constantly under pressure because every important task demands a lot of time','Able to plan ahead, build skills, and reduce crises in the long run','Less productive than others because there\'s no urgency pushing them','Often seen as unresponsive because they don\'t handle urgent tasks first'],
+      ans:1,
+      explain:'Q2 is the true "Focus Zone" — investing time here means better planning, personal growth, and significantly less Q1 fire-fighting over time.'
+    },
+    {
+      id:8, cat:'general',
+      text:'A new urgent task comes in mid-Pomodoro while you\'re deep in focus. What\'s the best way to handle it?',
+      opts:['Assess whether it\'s truly urgent first — if yes, stop the Pomodoro and switch immediately','Write it down, finish the current Pomodoro, then prioritize it afterward','Use the last 5 minutes of the Pomodoro to handle the new task before the break','Pass it to a teammate to protect your focus'],
+      ans:1,
+      explain:'Pomodoro uses a "distraction log" — write it down to avoid forgetting, then protect focus until the session ends. After the session, evaluate whether it was truly urgent. Switching mid-session destroys Deep Work unnecessarily.'
+    },
+    {
+      id:9, cat:'pomodoro',
+      text:'After completing 4 Pomodoro sessions, how long should you rest and what should you do during that time?',
+      opts:['5 minutes as usual, but switch to a different task to refresh your brain','10–15 minutes, using the time to review what you accomplished in the 4 sessions','15–30 minutes, and you should step away from your workspace to allow real mental recovery','30–60 minutes, because intense deep work requires full restoration'],
+      ans:2,
+      explain:'The long break after 4 sessions is 15–30 minutes, and you should genuinely step away — not just switch tasks or sit and review. The brain needs real recovery, not just task-switching.'
+    },
+    {
+      id:10, cat:'general',
+      text:'Which best reflects that someone manages their time well?',
+      opts:['No backlog at all, and they respond to messages quickly across all channels','Important tasks get done on schedule, and they still have time to develop themselves','They complete every item on their To-Do List without anything left out','They feel productive throughout the day with no idle time left over'],
+      ans:1,
+      explain:'Good time management is measured by outcomes, not busyness. Fast replies, cleared backlogs, or feeling productive all day don\'t necessarily reflect the right priorities being worked on.'
+    },
   ]
 };
 
