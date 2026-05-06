@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Management Assessment — Kinnest</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0f0f0f; --surface: #181818; --surface2: #222222;
+    --border: #2e2e2e; --text: #f0f0f0; --text-muted: #888; --text-dim: #555;
+    --red: #C0392B; --red-light: #e84c3d; --red-dim: #3d1a18;
+    --green: #27ae60; --green-dim: #1a3d2a;
+    --font: -apple-system, 'Segoe UI', 'Noto Sans Thai', sans-serif;
+    --mono: 'SF Mono', 'Consolas', monospace;
+    --radius: 10px; --radius-lg: 16px;
+  }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 28px; border-bottom: 1px solid var(--border);
+    background: var(--surface); position: sticky; top: 0; z-index: 100;
+  }
+  .kinnest-logo { font-family: var(--mono); font-size: 15px; font-weight: 600; letter-spacing: 0.05em; }
+  .kinnest-logo span { color: var(--red); }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .lang-toggle {
+    display: flex; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .lang-btn {
+    padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+    border: none; background: transparent; color: var(--text-muted);
+    font-family: var(--font); transition: all 0.2s; letter-spacing: 0.05em;
+  }
+  .lang-btn.active { background: var(--red); color: #fff; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .hero { text-align: center; padding: 24px 0 40px; }
+  .hero-badge {
+    display: inline-block; background: var(--red-dim); color: var(--red-light);
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 20px; margin-bottom: 20px;
+    border: 1px solid rgba(192,57,43,0.3);
+  }
+  .hero h1 { font-size: 32px; font-weight: 700; line-height: 1.25; margin-bottom: 14px; letter-spacing: -0.02em; }
+  .hero h1 em { color: var(--red-light); font-style: normal; }
+  .hero p { font-size: 15px; color: var(--text-muted); max-width: 500px; margin: 0 auto 32px; line-height: 1.7; }
+  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 36px; }
+  .info-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 12px; text-align: center; }
+  .info-item .val { font-family: var(--mono); font-size: 22px; font-weight: 500; display: block; }
+  .info-item .lbl { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font); font-size: 14px; font-weight: 600; padding: 13px 28px; border-radius: var(--radius); border: none; cursor: pointer; transition: all 0.18s; text-decoration: none; }
+  .btn-primary { background: var(--red); color: #fff; width: 100%; font-size: 15px; padding: 15px; }
+  .btn-primary:hover { background: var(--red-light); transform: translateY(-1px); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); width: 100%; padding: 14px; font-size: 14px; }
+  .btn-secondary:hover { border-color: #555; }
+
+  .progress-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+  .progress-bar { flex: 1; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--red); border-radius: 2px; transition: width 0.4s ease; }
+  .progress-label { font-family: var(--mono); font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+  .category-tag { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 4px; margin-bottom: 12px; }
+  .cat-pomodoro { background: rgba(52,152,219,0.15); color: #5dade2; }
+  .cat-todo { background: rgba(155,89,182,0.15); color: #bb8fce; }
+  .cat-matrix { background: rgba(39,174,96,0.15); color: #58d68d; }
+  .cat-general { background: rgba(192,57,43,0.15); color: var(--red-light); }
+
+  .q-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 12px; animation: fadeSlide 0.3s ease; }
+  @keyframes fadeSlide { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  .q-text { font-size: 17px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+  .q-number { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-bottom: 8px; }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option { display: flex; align-items: flex-start; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; cursor: pointer; transition: all 0.18s; text-align: left; font-family: var(--font); font-size: 14px; color: var(--text); line-height: 1.5; }
+  .option:hover { border-color: #444; background: #252525; }
+  .option.selected { border-color: var(--red); background: var(--red-dim); }
+  .option.correct { border-color: var(--green); background: var(--green-dim); }
+  .option.wrong { border-color: #7b2020; background: #2d1111; }
+  .option-letter { min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--border); font-family: var(--mono); font-size: 11px; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+  .option.selected .option-letter { background: var(--red); color: #fff; }
+  .option.correct .option-letter { background: var(--green); color: #fff; }
+  .option.wrong .option-letter { background: #7b2020; color: #fff; }
+
+  .q-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; gap: 12px; }
+  .btn-nav { flex: 1; padding: 13px 20px; border-radius: var(--radius); font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); transition: all 0.18s; }
+  .btn-back { background: var(--surface2); color: var(--text-muted); }
+  .btn-back:hover { color: var(--text); border-color: #555; }
+  .btn-next { background: var(--red); color: #fff; border-color: var(--red); }
+  .btn-next:hover { background: var(--red-light); }
+  .btn-next:disabled { background: #333; color: var(--text-dim); border-color: var(--border); cursor: not-allowed; }
+
+  .result-hero { text-align: center; padding: 24px 0; }
+  .score-circle { width: 140px; height: 140px; border-radius: 50%; border: 4px solid; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 24px; }
+  .score-num { font-family: var(--mono); font-size: 36px; font-weight: 500; line-height: 1; }
+  .score-denom { font-size: 13px; color: var(--text-muted); }
+  .pass .score-circle { border-color: var(--green); }
+  .pass .score-num { color: var(--green); }
+  .fail .score-circle { border-color: var(--red); }
+  .fail .score-num { color: var(--red-light); }
+  .result-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+  .result-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; line-height: 1.7; }
+
+  .breakdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .breakdown-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 10px; text-align: center; }
+  .breakdown-item .b-score { font-family: var(--mono); font-size: 20px; font-weight: 500; display: block; }
+  .breakdown-item .b-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  .cta-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; text-align: center; }
+  .cta-box h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .cta-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .form-group input, .form-group select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font); font-size: 14px; padding: 11px 14px; outline: none; transition: border-color 0.2s; }
+  .form-group input:focus, .form-group select:focus { border-color: var(--red); }
+  .form-group select option { background: #222; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin: 24px 0 12px; }
+  .review-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+  .review-q { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.5; }
+  .review-a { font-size: 13px; margin-bottom: 4px; }
+  .review-a.correct-a { color: var(--green); }
+  .review-a.wrong-a { color: #e84c3d; }
+  .review-explain { font-size: 12px; color: var(--text-dim); margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); line-height: 1.6; }
+
+  .success-msg { text-align: center; padding: 60px 20px; }
+  .success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--green-dim); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 26px; }
+  .success-msg h2 { font-size: 20px; margin-bottom: 10px; }
+  .success-msg p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="kinnest-logo">KINNEST<span>.</span></div>
+  <div class="header-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-th" onclick="setLang('th')">TH</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen active" id="screen-landing">
+  <div class="container">
+    <div class="hero">
+      <div class="hero-badge" id="l-badge">Pre-Training Assessment</div>
+      <h1 id="l-title">คุณบริหารเวลา<br><em>เก่งแค่ไหน?</em></h1>
+      <p id="l-desc">ทดสอบทักษะ Time Management ก่อนเข้า Training เพื่อให้ทุกคนได้ประโยชน์สูงสุดจากเวลาที่ลงทุนไป</p>
+      <div class="info-grid">
+        <div class="info-item"><span class="val">10</span><div class="lbl" id="l-q">ข้อ</div></div>
+        <div class="info-item"><span class="val">5–8</span><div class="lbl" id="l-min">นาที</div></div>
+        <div class="info-item"><span class="val">8/10</span><div class="lbl" id="l-pass">ผ่านเกณฑ์</div></div>
+      </div>
+      <button class="btn btn-primary" onclick="startQuiz()" id="l-start">เริ่มทดสอบ →</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-quiz">
+  <div class="container">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+      <div class="progress-label" id="progress-label">1 / 10</div>
+    </div>
+    <div id="q-area"></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-result">
+  <div class="container" id="result-container"></div>
+</div>
+
+<div class="screen" id="screen-success">
+  <div class="container">
+    <div class="success-msg">
+      <div class="success-icon">✓</div>
+      <h2 id="s-title">ลงทะเบียนเรียบร้อยแล้ว!</h2>
+      <p id="s-desc">ทีมงาน Kinnest จะส่งรายละเอียดการเข้าคลาส<br>ไปยังอีเมลที่คุณลงทะเบียนไว้ภายใน 24 ชั่วโมง</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONTENT STRINGS
+// ─────────────────────────────────────────────
+const STRINGS = {
+  th: {
+    badge: 'Pre-Training Assessment',
+    title: 'คุณบริหารเวลา<br><em>เก่งแค่ไหน?</em>',
+    desc: 'ทดสอบทักษะ Time Management ก่อนเข้า Training เพื่อให้ทุกคนได้ประโยชน์สูงสุดจากเวลาที่ลงทุนไป',
+    lq: 'ข้อ', lmin: 'นาที', lpass: 'ผ่านเกณฑ์', start: 'เริ่มทดสอบ →',
+    qOf: 'ข้อที่', of: '/',
+    back: '← ก่อนหน้า', next: 'ถัดไป →', finish: 'ดูผลลัพธ์ →',
+    passTitle: 'ยอดเยี่ยม! คุณบริหารเวลาได้ดี',
+    failTitle: 'มีโอกาสพัฒนาเพิ่มเติม',
+    passDesc: score => `คุณทำได้ ${score}/10 คะแนน ผ่านเกณฑ์ 8/10 — ทักษะ Time Management ของคุณแข็งแกร่งดี`,
+    failDesc: score => `คุณทำได้ ${score}/10 คะแนน ยังต่ำกว่าเกณฑ์ผ่าน — Training นี้จะช่วยเติมเต็มช่องว่างที่พบ`,
+    from: 'จาก 10',
+    ctaPassTitle: '🎯 คุณผ่านเกณฑ์แล้ว!',
+    ctaPassDesc: 'คะแนนของคุณสูงกว่าเกณฑ์ผ่าน (8/10) ไม่จำเป็นต้องเข้าคลาสนี้ แต่ถ้าอยากทบทวนหรือต้องการ certificate สามารถลงทะเบียนได้',
+    ctaPassBtn: 'ลงทะเบียนเข้าคลาส (Optional) →',
+    ctaFailTitle: '📋 แนะนำให้เข้าคลาส',
+    ctaFailDesc: 'คะแนนของคุณต่ำกว่าเกณฑ์ผ่าน (8/10) Training นี้จะช่วยให้คุณบริหารเวลาได้ดีขึ้นอย่างมีนัยสำคัญ',
+    ctaFailBtn: 'ลงทะเบียนเข้าคลาส →',
+    reviewTitle: 'ทบทวนคำตอบ',
+    yourAns: 'คำตอบของคุณ',
+    correctAns: '✓ คำตอบที่ถูก',
+    regTitle: 'ลงทะเบียนเข้าคลาส',
+    regDesc: 'กรอกข้อมูลเพื่อจองที่นั่ง — ทีมงานจะยืนยันกลับหาคุณทาง Email',
+    fFirst: 'ชื่อ', fLast: 'นามสกุล', fEmail: 'Email',
+    fDept: 'แผนก / ทีม', fPos: 'ตำแหน่ง',
+    pFirst: 'ชื่อจริง', pLast: 'นามสกุล', pEmail: 'email@company.com',
+    pDept: 'เช่น Marketing, HR', pPos: 'เช่น Manager, Executive',
+    submit: 'ยืนยันลงทะเบียน →',
+    valErr: 'กรุณากรอกชื่อ นามสกุล และ Email ให้ครบ',
+    succTitle: 'ลงทะเบียนเรียบร้อยแล้ว!',
+    succDesc: 'ทีมงาน Kinnest จะส่งรายละเอียดการเข้าคลาส<br>ไปยังอีเมลที่คุณลงทะเบียนไว้ภายใน 24 ชั่วโมง',
+    catLabels: { pomodoro: 'Pomodoro', todo: 'To-Do List', matrix: 'Time Matrix', general: 'ทักษะทั่วไป' },
+  },
+  en: {
+    badge: 'Pre-Training Assessment',
+    title: 'How well do you<br><em>manage your time?</em>',
+    desc: 'Test your Time Management skills before the training — so everyone gets the most out of their time investment.',
+    lq: 'Questions', lmin: 'Minutes', lpass: 'Pass mark', start: 'Start Assessment →',
+    qOf: 'Question', of: '/',
+    back: '← Previous', next: 'Next →', finish: 'See Results →',
+    passTitle: 'Excellent! You manage time well.',
+    failTitle: 'There\'s room to grow.',
+    passDesc: score => `You scored ${score}/10 — above the 8/10 pass mark. Your Time Management skills are strong.`,
+    failDesc: score => `You scored ${score}/10 — below the 8/10 pass mark. This training will help close the gaps.`,
+    from: 'out of 10',
+    ctaPassTitle: '🎯 You passed!',
+    ctaPassDesc: 'Your score is above the pass mark (8/10). Attending this class is optional, but you\'re welcome to join for a certificate or a refresher.',
+    ctaPassBtn: 'Register (Optional) →',
+    ctaFailTitle: '📋 We recommend attending',
+    ctaFailDesc: 'Your score is below the pass mark (8/10). This training will significantly improve your time management skills.',
+    ctaFailBtn: 'Register for the Class →',
+    reviewTitle: 'Review Answers',
+    yourAns: 'Your answer',
+    correctAns: '✓ Correct answer',
+    regTitle: 'Register for the Class',
+    regDesc: 'Fill in your details to reserve your spot — we\'ll confirm via email.',
+    fFirst: 'First Name', fLast: 'Last Name', fEmail: 'Email',
+    fDept: 'Department / Team', fPos: 'Position',
+    pFirst: 'First name', pLast: 'Last name', pEmail: 'email@company.com',
+    pDept: 'e.g. Marketing, HR', pPos: 'e.g. Manager, Executive',
+    submit: 'Confirm Registration →',
+    valErr: 'Please fill in your first name, last name, and email.',
+    succTitle: 'Registration Confirmed!',
+    succDesc: 'The Kinnest team will send class details<br>to your registered email within 24 hours.',
+    catLabels: { pomodoro: 'Pomodoro', todo: 'To-Do List', matrix: 'Time Matrix', general: 'General Skills' },
+  }
+};
+
+// ─────────────────────────────────────────────
+// QUESTIONS (bilingual)
+// ─────────────────────────────────────────────
+const QUESTIONS = {
+  th: [
+    { id:1, cat:'general', text:'เมื่อคุณมีงานหลายชิ้นพร้อมกัน สิ่งแรกที่ควรทำคืออะไร?', opts:['เริ่มจากงานที่ง่ายที่สุดก่อนเพื่อล้างรายการ','จัดลำดับความสำคัญก่อนว่างานไหน urgent / important','ทำทุกงานพร้อมกัน (multitask) เพื่อประหยัดเวลา','รอให้งานเก่าเสร็จทั้งหมดก่อนค่อยรับงานใหม่'], ans:1, explain:'การจัดลำดับความสำคัญด้วย Time Matrix คือรากฐานของ Time Management ที่ดี ก่อนลงมือทำต้องรู้ก่อนว่าอะไรควรทำก่อน' },
+    { id:2, cat:'pomodoro', text:'Pomodoro Technique คือการทำงาน 25 นาที แล้วพัก 5 นาที — ข้อใดอธิบาย "เหตุผล" ที่ถูกต้องที่สุด?', opts:['เพราะสมองมนุษย์ไม่สามารถจดจ่อได้นานกว่า 25 นาที','เพื่อสร้าง Deep Work โดยป้องกันการถูกขัดจังหวะและรักษาสมาธิ','เพราะ 25 นาทีเป็นช่วงเวลาที่พิสูจน์แล้วว่าสั้นที่สุด','เพื่อให้มีเวลาตรวจ social media ทุก 30 นาที'], ans:1, explain:'Pomodoro ถูกออกแบบมาเพื่อสร้าง uninterrupted deep work — ป้องกันการถูกขัดจังหวะและสร้างสมาธิในการทำงานที่ซับซ้อน' },
+    { id:3, cat:'pomodoro', text:'งานประเภทใดที่ "ไม่เหมาะ" กับการใช้ Pomodoro Technique?', opts:['งานเขียน Report ที่ต้องการสมาธิสูง','งาน Creative เช่น ออกแบบ Presentation','งานตอบอีเมลทั่วไปหรืองาน Admin ซ้ำๆ','งาน Analysis ที่ต้องการข้อมูลเชิงลึก'], ans:2, explain:'Pomodoro เหมาะกับงานที่ต้องการ Deep Work ไม่เหมาะกับงานซ้ำๆ หรืองาน Admin เบาๆ ที่ไม่ต้องการความจดจ่อต่อเนื่อง' },
+    { id:4, cat:'todo', text:'To-Do List ที่ดีควรมีกี่ task ต่อวัน และรูปแบบใดที่มีประสิทธิภาพสูงสุด?', opts:['ไม่จำกัดจำนวน — ยิ่งมากยิ่งดีเพื่อให้ครอบคลุมทุกอย่าง','3–5 tasks และต้องเป็น actionable task (ทำได้ทันที)','10 tasks ขึ้นไปเพื่อให้ไม่มีเวลาว่าง','20 tasks แต่จัดกลุ่มตาม category'], ans:1, explain:'"Limit to 3–5 tasks only" คือหลักการสำคัญ และ task ต้องเป็น actionable เช่น "Request invoice from vendor" ไม่ใช่ "Pay vendor"' },
+    { id:5, cat:'todo', text:'ข้อใดคือ "Actionable Task" ที่ดีที่สุด?', opts:['ติดตาม KPI','ประสานงานเรื่อง Event','ส่ง survey ให้พนักงาน 10 คนภายใน 11:00 น.','ดูแลเรื่อง Performance Review ของทีม'], ans:2, explain:'Actionable Task ต้องระบุ "ทำอะไร กับใคร ภายในเมื่อไหร่" — "ส่ง survey ให้พนักงาน 10 คนภายใน 11:00 น." มีครบถ้วน' },
+    { id:6, cat:'matrix', text:'งาน "ตอบอีเมลแจ้งเรื่องด่วนจากลูกค้า" ควรอยู่ใน Quadrant ใดของ Time Matrix?', opts:['Q1 — Manage (สำคัญ + ด่วน)','Q2 — Focus (สำคัญ + ไม่ด่วน)','Q3 — Avoid (ไม่สำคัญ + ด่วน)','Q4 — Limit (ไม่สำคัญ + ไม่ด่วน)'], ans:0, explain:'งานที่ด่วนและสำคัญพร้อมกัน เช่น เรื่องลูกค้า crisis อยู่ใน Q1 (Manage) ต้องจัดการทันที' },
+    { id:7, cat:'matrix', text:'พนักงานที่ใช้เวลาส่วนใหญ่อยู่ใน Q2 (สำคัญ + ไม่ด่วน) มักจะ...', opts:['รู้สึก stress และ reactive ตลอดเวลา','มีเวลาวางแผน พัฒนาตัวเอง และลด crisis ในระยะยาว','ทำงานน้อยกว่าคนอื่น เพราะไม่มีความเร่งด่วน','ผัดวันประกันพรุ่งเพราะงานไม่ด่วน'], ans:1, explain:'Q2 คือ "Focus Zone" — คนที่ทำงานใน Q2 มาก จะวางแผนได้ดี พัฒนาทักษะ และลดการ fire-fighting ใน Q1 ในระยะยาว' },
+    { id:8, cat:'general', text:'คุณมี task ด่วนแทรกเข้ามากลางช่วง Pomodoro — วิธีจัดการที่ดีที่สุดคือ?', opts:['หยุด Pomodoro ทันทีและไปทำ task ใหม่','จดบันทึก task ใหม่ไว้ก่อน แล้วทำต่อจนจบ Pomodoro แล้วค่อยประเมิน','ทำ task ใหม่ควบคู่ไปกับงานเดิมพร้อมกัน','ปฏิเสธ task ใหม่ทุกครั้งเพราะกำลัง Pomodoro อยู่'], ans:1, explain:'แนวทางของ Pomodoro คือ "จดไว้ก่อน" แล้วทำให้จบ session เพื่อรักษา Deep Work จากนั้นค่อย prioritize task ใหม่' },
+    { id:9, cat:'pomodoro', text:'หลังทำ Pomodoro ครบ 4 รอบ ควรพักนานแค่ไหน?', opts:['5 นาที เหมือนเดิม','10 นาที','15–30 นาที (Long Break)','1 ชั่วโมง เพราะทำงานมาเยอะ'], ans:2, explain:'หลัก Pomodoro คือ พัก 5 นาทีหลังแต่ละ session และพักยาว 15–30 นาทีหลังครบ 4 sessions เพื่อให้สมองฟื้นตัวเต็มที่' },
+    { id:10, cat:'general', text:'ข้อใดคือสัญญาณว่าคุณ "บริหารเวลาได้ดี"?', opts:['ทำงานมากกว่า 10 ชั่วโมง/วันและไม่มีวันหยุด','รู้สึก busy ตลอดเวลาและมีงาน backlog น้อยมาก','งานสำคัญเสร็จตามกำหนด และยังมีเวลาพัฒนาตัวเองได้','ตอบ Line/Email ได้ทุกข้อความภายใน 5 นาที'], ans:2, explain:'การบริหารเวลาที่ดีไม่ใช่การ "ยุ่ง" ตลอดเวลา แต่คือทำสิ่งสำคัญเสร็จตามเป้า และยังมีเวลาสำหรับพัฒนาตัวเองและพักผ่อน' },
+  ],
+  en: [
+    { id:1, cat:'general', text:'When you have multiple tasks at the same time, what should you do first?', opts:['Start with the easiest task to clear the list quickly','Prioritize by urgency and importance before starting anything','Multitask all of them simultaneously to save time','Wait until all old tasks are done before accepting new ones'], ans:1, explain:'Prioritizing with the Time Matrix (Eisenhower) is the foundation of effective time management. Know what to do first before diving in.' },
+    { id:2, cat:'pomodoro', text:'The Pomodoro Technique uses 25-minute work sessions with 5-minute breaks. Which best explains the reason behind this?', opts:['Because the human brain cannot focus for more than 25 minutes','To create deep, uninterrupted work by preventing distractions','Because 25 minutes is scientifically proven to be the shortest effective unit','To allow time to check social media every 30 minutes'], ans:1, explain:'Pomodoro is designed to foster uninterrupted deep work — preventing interruptions and sustaining focus for complex tasks.' },
+    { id:3, cat:'pomodoro', text:'Which type of task is LEAST suited for the Pomodoro Technique?', opts:['Writing a detailed report requiring high concentration','Creative work such as designing a presentation','Answering routine emails or repetitive admin tasks','In-depth data analysis work'], ans:2, explain:'Pomodoro works best for deep work requiring sustained focus. It\'s not well-suited for repetitive or light admin tasks.' },
+    { id:4, cat:'todo', text:'How many tasks should an effective daily To-Do List have, and what format works best?', opts:['No limit — the more the better to cover everything','3–5 tasks, written as actionable items you can act on immediately','10 or more tasks to keep busy all day','20 tasks grouped by category'], ans:1, explain:'"Limit to 3–5 tasks only" is a key principle. Tasks must be actionable — e.g. "Request invoice from vendor", not just "Pay vendor".' },
+    { id:5, cat:'todo', text:'Which is the best example of an "Actionable Task"?', opts:['Follow up on KPIs','Coordinate the event','Send survey to 10 employees by 11:00 AM','Handle team performance reviews'], ans:2, explain:'An actionable task must specify what, with whom, and by when. "Send survey to 10 employees by 11:00 AM" covers all three.' },
+    { id:6, cat:'matrix', text:'"Reply to an urgent client email" belongs in which quadrant of the Time Matrix?', opts:['Q1 — Manage (Important + Urgent)','Q2 — Focus (Important + Not Urgent)','Q3 — Avoid (Not Important + Urgent)','Q4 — Limit (Not Important + Not Urgent)'], ans:0, explain:'Tasks that are both urgent and important — like a client crisis — belong in Q1 (Manage) and must be handled immediately.' },
+    { id:7, cat:'matrix', text:'Employees who spend most of their time in Q2 (Important + Not Urgent) tend to...', opts:['Feel constantly stressed and reactive','Have time to plan, grow, and reduce crises in the long run','Work less than others due to no urgency','Procrastinate because nothing feels urgent'], ans:1, explain:'Q2 is the "Focus Zone" — people who invest here plan better, build skills, and reduce Q1 fire-fighting over time.' },
+    { id:8, cat:'general', text:'An urgent task comes in mid-Pomodoro session. What\'s the best way to handle it?', opts:['Stop the Pomodoro immediately and switch to the new task','Write it down, finish the current Pomodoro, then reassess','Do both tasks simultaneously','Always refuse new tasks while in a Pomodoro'], ans:1, explain:'The Pomodoro method recommends "writing it down" (internal distraction log), finishing the session to protect deep work, then prioritizing the new task.' },
+    { id:9, cat:'pomodoro', text:'After completing 4 Pomodoro sessions, how long should you take a break?', opts:['5 minutes, same as usual','10 minutes','15–30 minutes (Long Break)','1 hour, because you\'ve worked a lot'], ans:2, explain:'Pomodoro protocol calls for a 5-minute break after each session and a long break of 15–30 minutes after 4 sessions, to fully restore mental energy.' },
+    { id:10, cat:'general', text:'Which is the clearest sign that you manage your time well?', opts:['Working 10+ hours a day with no days off','Feeling busy all the time with minimal backlog','Important tasks get done on schedule, and you still have time to develop yourself','Responding to every Line/Email within 5 minutes'], ans:2, explain:'Good time management isn\'t about being busy — it\'s about completing what matters on time while still having space to grow and rest.' },
+  ]
+};
+
+const CAT_CLASS = { pomodoro:'cat-pomodoro', todo:'cat-todo', matrix:'cat-matrix', general:'cat-general' };
+const LETTERS = ['A','B','C','D'];
+
+let lang = 'th';
+let current = 0;
+let answers = new Array(10).fill(null);
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-th').classList.toggle('active', l === 'th');
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  updateLandingText();
+  if (document.getElementById('screen-quiz').classList.contains('active')) renderQuestion();
+}
+
+function s() { return STRINGS[lang]; }
+function q() { return QUESTIONS[lang]; }
+
+function updateLandingText() {
+  const st = s();
+  document.getElementById('l-badge').textContent = st.badge;
+  document.getElementById('l-title').innerHTML = st.title;
+  document.getElementById('l-desc').textContent = st.desc;
+  document.getElementById('l-q').textContent = st.lq;
+  document.getElementById('l-min').textContent = st.lmin;
+  document.getElementById('l-pass').textContent = st.lpass;
+  document.getElementById('l-start').textContent = st.start;
+}
+
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(sc => sc.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startQuiz() {
+  current = 0;
+  answers = new Array(10).fill(null);
+  goTo('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const qs = q();
+  const sq = qs[current];
+  const st = s();
+  const pct = ((current + 1) / 10 * 100).toFixed(0);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = (current + 1) + st.of + '10';
+
+  const optsHtml = sq.opts.map((o, i) => {
+    const cls = answers[current] === i ? 'selected' : '';
+    return `<button class="option ${cls}" onclick="selectOpt(${i})">
+      <span class="option-letter">${LETTERS[i]}</span><span>${o}</span>
+    </button>`;
+  }).join('');
+
+  document.getElementById('q-area').innerHTML = `
+    <span class="category-tag ${CAT_CLASS[sq.cat]}">${st.catLabels[sq.cat]}</span>
+    <div class="q-card">
+      <div class="q-number">${st.qOf} ${sq.id}</div>
+      <div class="q-text">${sq.text}</div>
+      <div class="options">${optsHtml}</div>
+    </div>
+    <div class="q-nav">
+      ${current > 0
+        ? `<button class="btn-nav btn-back" onclick="prevQ()">${st.back}</button>`
+        : `<div></div>`}
+      <button class="btn-nav btn-next" id="btn-next" onclick="nextQ()" ${answers[current] === null ? 'disabled' : ''}>
+        ${current < 9 ? st.next : st.finish}
+      </button>
+    </div>
+  `;
+}
+
+function selectOpt(i) { answers[current] = i; renderQuestion(); }
+function prevQ() { if (current > 0) { current--; renderQuestion(); } }
+function nextQ() {
+  if (answers[current] === null) return;
+  if (current < 9) { current++; renderQuestion(); }
+  else showResult();
+}
+
+function showResult() {
+  goTo('screen-result');
+  const st = s(); const qs = q();
+  let score = 0;
+  const bd = { pomodoro:[0,0], todo:[0,0], matrix:[0,0], general:[0,0] };
+  qs.forEach((qq, i) => {
+    bd[qq.cat][1]++;
+    if (answers[i] === qq.ans) { score++; bd[qq.cat][0]++; }
+  });
+  const pass = score >= 8;
+
+  const reviewHtml = qs.map((qq, i) => {
+    const ok = answers[i] === qq.ans;
+    return `<div class="review-item">
+      <div class="review-q">${qq.id}. ${qq.text}</div>
+      <div class="review-a ${ok ? 'correct-a' : 'wrong-a'}">
+        ${ok ? '✓' : '✗'} ${st.yourAns}: ${LETTERS[answers[i]]}. ${qq.opts[answers[i]]}
+      </div>
+      ${!ok ? `<div class="review-a correct-a">${st.correctAns}: ${LETTERS[qq.ans]}. ${qq.opts[qq.ans]}</div>` : ''}
+      <div class="review-explain">${qq.explain}</div>
+    </div>`;
+  }).join('');
+
+  const ctaHtml = pass
+    ? `<div class="cta-box">
+        <h3>${st.ctaPassTitle}</h3><p>${st.ctaPassDesc}</p>
+        <button class="btn btn-secondary" onclick="showRegister()">${st.ctaPassBtn}</button>
+      </div>`
+    : `<div class="cta-box">
+        <h3>${st.ctaFailTitle}</h3><p>${st.ctaFailDesc}</p>
+        <button class="btn btn-primary" onclick="showRegister()">${st.ctaFailBtn}</button>
+      </div>`;
+
+  document.getElementById('result-container').innerHTML = `
+    <div class="result-hero ${pass ? 'pass' : 'fail'}">
+      <div class="score-circle">
+        <span class="score-num">${score}</span>
+        <span class="score-denom">${st.from}</span>
+      </div>
+      <div class="result-title">${pass ? st.passTitle : st.failTitle}</div>
+      <div class="result-desc">${pass ? st.passDesc(score) : st.failDesc(score)}</div>
+    </div>
+    <div class="breakdown-grid">
+      <div class="breakdown-item"><span class="b-score">${bd.pomodoro[0]}/${bd.pomodoro[1]}</span><div class="b-label">Pomodoro</div></div>
+      <div class="breakdown-item"><span class="b-score">${bd.todo[0]}/${bd.todo[1]}</span><div class="b-label">To-Do List</div></div>
+      <div class="breakdown-item"><span class="b-score">${bd.matrix[0]}/${bd.matrix[1]}</span><div class="b-label">Time Matrix</div></div>
+    </div>
+    <div id="cta-area">${ctaHtml}</div>
+    <div class="section-title">${st.reviewTitle}</div>
+    ${reviewHtml}
+  `;
+}
+
+function showRegister() {
+  const st = s();
+  document.getElementById('cta-area').innerHTML = `
+    <div class="cta-box" style="text-align:left">
+      <h3>${st.regTitle}</h3>
+      <p>${st.regDesc}</p>
+      <div class="form-row">
+        <div class="form-group"><label>${st.fFirst}</label><input type="text" id="rf" placeholder="${st.pFirst}"></div>
+        <div class="form-group"><label>${st.fLast}</label><input type="text" id="rl" placeholder="${st.pLast}"></div>
+      </div>
+      <div class="form-group"><label>${st.fEmail}</label><input type="email" id="re" placeholder="${st.pEmail}"></div>
+      <div class="form-row">
+        <div class="form-group"><label>${st.fDept}</label><input type="text" id="rd" placeholder="${st.pDept}"></div>
+        <div class="form-group"><label>${st.fPos}</label><input type="text" id="rp" placeholder="${st.pPos}"></div>
+      </div>
+      <button class="btn btn-primary" onclick="submitReg()">${st.submit}</button>
+    </div>
+  `;
+  document.getElementById('cta-area').scrollIntoView({ behavior: 'smooth' });
+}
+
+function submitReg() {
+  const st = s();
+  const f = document.getElementById('rf').value.trim();
+  const l = document.getElementById('rl').value.trim();
+  const e = document.getElementById('re').value.trim();
+  if (!f || !l || !e) { alert(st.valErr); return; }
+
+  const GOOGLE_FORM_URL = 'https://forms.gle/9qYPmuLJK2WbChqr8'
+
+  window.open(GOOGLE_FORM_URL, '_blank');
+  goTo('screen-success');
+}
+
+updateLandingText();
+</script>
+</body>
+</html>
